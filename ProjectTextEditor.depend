@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1734620440 source:c:\users\user\documents\kuliah\sem 3\praktikum struktur data\projecttexteditor\main.cpp
+	<iostream>
+	<string>
+	<stack>
+	<vector>
+

@@ -27,6 +27,7 @@ struct Action {
         int linePos;          // Posisi baris tempat penggantian terjadi
         int charIdx;          // Indeks karakter tempat penggantian terjadi
         string oldText;       // Teks lama sebelum penggantian
+        string newText;       // Teks baru yang menggantikan oldText
     };
 
     vector<Replacement> replacements; // Menyimpan semua penggantian teks (untuk REPLACE_TEXT)
@@ -325,6 +326,7 @@ public:
                 rep.linePos = linePos;
                 rep.charIdx = pos;
                 rep.oldText = search;
+                rep.newText = replace; // Menyimpan teks pengganti
                 allReplacements.push_back(rep);
 
                 // Ganti kata kunci dengan teks pengganti
@@ -605,9 +607,9 @@ public:
                         index++;
                     }
                     if (targetNode != nullptr) {
-                        if (it->charIdx >= 0 && it->charIdx <= targetNode->data.length()) {
+                        if (it->charIdx >= 0 && it->charIdx + it->newText.length() <= targetNode->data.length()) {
                             // Mengganti kembali teks ke teks lama
-                            targetNode->data.replace(it->charIdx, lastAction.searchText.length(), it->oldText);
+                            targetNode->data.replace(it->charIdx, it->newText.length(), it->oldText);
                         }
                     }
                 }
@@ -704,9 +706,9 @@ public:
                         index++;
                     }
                     if (targetNode != nullptr) {
-                        if (rep.charIdx >= 0 && rep.charIdx <= targetNode->data.length()) {
+                        if (rep.charIdx >= 0 && rep.charIdx + rep.oldText.length() <= targetNode->data.length()) {
                             // Mengganti teks ke teks baru
-                            targetNode->data.replace(rep.charIdx, lastAction.searchText.length(), lastAction.replaceWithText);
+                            targetNode->data.replace(rep.charIdx, rep.oldText.length(), rep.newText);
                         }
                     }
                 }
